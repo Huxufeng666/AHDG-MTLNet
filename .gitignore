@@ -1,0 +1,43 @@
+# Python cache and local environments
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+.env
+.env.*
+
+# Training artifacts and experiment outputs
+**/results/
+**/visualizations/
+**/logs/
+checkpoints/
+wandb/
+runs/
+tensorboard/
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.log
+*.csv
+
+# Datasets and generated data
+data/
+dataset/
+datasets/
+BUSI_5fold/
+BUSI_5fold1004/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local backup copies
+*.bak
+*.bak_*
+*.before_*

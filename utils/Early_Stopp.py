@@ -1,0 +1,32 @@
+class EarlyStopping:
+    def __init__(self, patience=10, min_delta=1e-6, restore_best_weights=True):
+
+        self.patience = patience
+        self.min_delta = min_delta
+        self.restore_best_weights = restore_best_weights
+        self.best_loss = None
+        self.counter = 0
+        self.best_weights = None
+        self.early_stop = False
+
+    def step(self, val_loss, model,epoch):
+
+        if self.best_loss is None:
+            self.best_loss = val_loss
+            self.best_weights = {k: v.cpu() for k, v in model.state_dict().items()}
+        elif val_loss < self.best_loss - self.min_delta:
+            self.best_loss = val_loss
+            self.counter = 0
+            self.best_weights = {k: v.cpu() for k, v in model.state_dict().items()}
+            print(f"Validation loss improved to {val_loss:.6f}")
+        else:
+            self.counter += 1
+            print(f"No improvement. Early stopping counter: {self.counter}/{self.patience}")
+            if self.counter >= self.patience:
+                print(f"Early stopping triggered after epoch {epoch}")
+                self.early_stop = True
+                if self.restore_best_weights:
+                    print("Restoring best weights...")
+                    model.load_state_dict(self.best_weights)
+                    
+                    
