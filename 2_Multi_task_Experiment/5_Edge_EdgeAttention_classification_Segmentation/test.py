@@ -81,7 +81,7 @@ def parse_args():
 def build_model(
     use_cls, device, mixer_depth=4, mixer_kernel=7, edge_alpha=0.08,
     use_mixer=True, use_msag=True, use_att_gate=True, use_edge_attention=True,
-    stem_channels=16, raw_branch_bias=0.65, fusion_strength=0.35, detail_strength=1.0,
+    stem_channels=16, raw_branch_bias=0.50, fusion_strength=1.0, detail_strength=1.0,
 ):
     """Build the project's only supported architecture: HighFreqShallow V8 ResNet-18."""
     return DualBranchHighFreqShallowV8_Resnet18(
@@ -153,8 +153,8 @@ def load_model(weight_path, device):
         use_att_gate = ckpt.get("use_att_gate", True)
         use_edge_attention = ckpt.get("use_edge_attention", True)
         stem_channels = ckpt.get("stem_channels", 16)
-        raw_branch_bias = ckpt.get("raw_branch_bias", 0.65)
-        fusion_strength = ckpt.get("fusion_strength", 0.35)
+        raw_branch_bias = ckpt.get("raw_branch_bias", 0.50)
+        fusion_strength = ckpt.get("fusion_strength", 1.0)
         detail_strength = ckpt.get("detail_strength", 1.0)
         use_soft_cls_gate = ckpt.get("use_soft_cls_gate", False)
         cls_gate_strength = ckpt.get("cls_gate_strength", 0.75)
@@ -174,8 +174,8 @@ def load_model(weight_path, device):
         use_att_gate = True
         use_edge_attention = True
         stem_channels = 16
-        raw_branch_bias = 0.65
-        fusion_strength = 0.35
+        raw_branch_bias = 0.50
+        fusion_strength = 1.0
         detail_strength = 1.0
         use_soft_cls_gate = False
         cls_gate_strength = 0.75

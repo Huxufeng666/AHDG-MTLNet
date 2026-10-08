@@ -68,8 +68,8 @@ for fold in "${folds[@]}"; do
     --seed "$seed" \
     --stem-channels 16 \
     --detail-strength 1.0 \
-    --raw-branch-bias 0.65 \
-    --fusion-strength 0.35 \
+    --raw-branch-bias 0.50 \
+    --fusion-strength 1.0 \
     --export-visuals 0
 
   checkpoint="$output_dir/best_model_all_case.pth"

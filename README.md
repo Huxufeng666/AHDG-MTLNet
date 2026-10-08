@@ -41,6 +41,13 @@ AHDG_MTLNET_LAST/
 
 The same backbone supports the complete model and all ablations through `use_hfd`, `fusion_mode`, `use_msag`, `use_edge_attention`, and `use_cls` switches.
 
+## Paper-aligned defaults
+
+The default five-fold launchers implement the manuscript configuration: a 16-channel input stem, a four-layer ConvMixer bottleneck, and ADF using direct raw/detail concatenation (`raw_branch_bias=0.50`) with a bounded residual coefficient of `fusion_strength=1.0`. EMA and validation-time flip TTA are disabled by default because they are not part of the reported experimental protocol. The corresponding command-line switches remain available only for explicit, separately reported extensions.
+
+> **Reproducibility note:** Existing checkpoints trained before this alignment may use the previous ADF and evaluation settings. Retrain all five folds before using them to support manuscript tables.
+
+
 ## Dataset and Environment
 
 The current training scripts use the following five-fold BUSI dataset root:

@@ -95,7 +95,7 @@ class LightweightDetailEncoder(nn.Module):
 class ResidualDetailFusionBlock(nn.Module):
     """Inject detail as a bounded residual; gamma=0 makes this an exact identity."""
 
-    def __init__(self, channels, raw_branch_bias=0.75, fusion_strength=0.10):
+    def __init__(self, channels, raw_branch_bias=0.50, fusion_strength=1.0):
         super().__init__()
         hidden = max(channels // 4, 16)
         self.fusion_strength = fusion_strength
@@ -126,8 +126,9 @@ class ResidualDetailFusionBlock(nn.Module):
         self.gamma = nn.Parameter(torch.zeros(1))
 
     def forward(self, feat_raw, feat_detail):
-        # Preserve the average activation scale at bias=0.5 while making the
-        # advertised raw/detail preference an effective part of ADF.
+        # At the paper default raw_branch_bias=0.50, this is the direct
+        # concatenation Concat(feat_raw, feat_detail). Non-default values are
+        # retained only for backward compatibility with legacy checkpoints.
         pair = torch.cat([
             2.0 * self.raw_branch_bias * feat_raw,
             2.0 * (1.0 - self.raw_branch_bias) * feat_detail,
@@ -141,7 +142,7 @@ class ResidualDetailFusionBlock(nn.Module):
 class DirectDetailFusionBlock(nn.Module):
     """Parameter-free control for testing adaptive fusion against direct addition."""
 
-    def __init__(self, fusion_strength=0.10):
+    def __init__(self, fusion_strength=1.0):
         super().__init__()
         self.fusion_strength = float(fusion_strength)
 
@@ -157,7 +158,7 @@ class DualBranchHighFreqShallowV8_Resnet18(nn.Module):
         cls_classes=3,
         use_cls=True,
         stem_channels=16,
-        mixer_depth=3,
+        mixer_depth=4,
         mixer_kernel=7,
         edge_alpha=0.1,
         backbone="resnet18",
@@ -166,8 +167,8 @@ class DualBranchHighFreqShallowV8_Resnet18(nn.Module):
         use_att_gate=True,
         use_edge_attention=True,
         detail_strength=1.0,
-        raw_branch_bias=0.65,
-        fusion_strength=0.35,
+        raw_branch_bias=0.50,
+        fusion_strength=1.0,
         use_hfd=True,
         use_detail_fusion=True,
         hfd_input_injection=False,
